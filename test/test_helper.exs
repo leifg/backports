@@ -1,2 +1,1 @@
-alias Wrapper
 ExUnit.start()
