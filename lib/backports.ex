@@ -1,7 +1,4 @@
 defmodule Backports do
-  @backports %{
-    {[:String], :trim} => {[:String], :strip}
-  }
   defmacro __using__(_) do
     quote do
       Module.register_attribute __MODULE__, :functions, accumulate: true
@@ -29,7 +26,7 @@ defmodule Backports do
 
   defp change?(_args, true), do: true
   defp change?({:., _meta1, [{_aliases, _meta2, aliases}, function_name]}, _found) do
-    @backports[{aliases, function_name}] != nil
+    Lookup.get(aliases, function_name) != nil
   end
   defp change?({:__block__, meta, [head | rest]}, found) do
     result = change?(head, found)
@@ -57,7 +54,7 @@ defmodule Backports do
   end
 
   defp backport({:., meta1, [{:__aliases__, meta2, aliases}, function_name]} = input) do
-    case @backports[{aliases, function_name}] do
+    case Lookup.get(aliases, function_name) do
       nil -> input
       {replace_aliases, replace_function} -> {:., meta1, [{:__aliases__, meta2, replace_aliases}, replace_function]}
     end
