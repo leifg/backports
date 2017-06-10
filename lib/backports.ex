@@ -12,8 +12,11 @@ defmodule Backports do
   defmacro before_compile(env) do
     functions = Module.get_attribute(env.module, :functions) |> Enum.reverse
     to_override = Module.get_attribute(env.module, :backport) |> Enum.uniq
-    overridable = quote do: defoverridable unquote(to_override)
-    [overridable | Enum.map(functions, &render_fun/1)]
+    overridable_function_definitions = functions
+      |> Enum.filter(&to_override?(&1, to_override))
+      |> Enum.map(&render_fun/1)
+
+    quoted_overridable(to_override) ++ overridable_function_definitions
   end
 
   def on_definition(env, kind, fun, args, guards, body) do
@@ -22,6 +25,18 @@ defmodule Backports do
     if change?(body, false) do
       Module.put_attribute(env.module, :backport, {fun, length(args)})
     end
+  end
+
+  defp to_override?({_kind, name, args, _guards, _body}, reference) do
+    Enum.member?(reference, {name, length(args)})
+  end
+
+  defp quoted_overridable([]) do
+    []
+  end
+
+  defp quoted_overridable(function_defintions) do
+    [quote do: defoverridable unquote(function_defintions)]
   end
 
   defp change?(_args, true), do: true
