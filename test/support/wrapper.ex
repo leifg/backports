@@ -17,10 +17,6 @@ defmodule Wrapper do
     String.trim(input)
   end
 
-  def trim(input) when is_list(input) do
-    Enum.map(input, &String.trim/1)
-  end
-
   def nothing_special do
     1 == 1
   end
