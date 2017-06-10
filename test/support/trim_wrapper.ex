@@ -1,4 +1,4 @@
-defmodule Wrapper do
+defmodule TrimWrapper do
   use Backports
 
   def trim(nil) do
