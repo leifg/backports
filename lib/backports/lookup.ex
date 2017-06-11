@@ -1,4 +1,4 @@
-defmodule Lookup do
+defmodule Backports.Lookup do
   def get(aliases, function_name) do
     internal_lookup = elixir_version() |> lookup()
     internal_lookup[{aliases, function_name}]

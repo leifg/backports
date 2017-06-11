@@ -1,4 +1,6 @@
 defmodule Backports do
+  alias Backports.Lookup
+
   defmacro __using__(_) do
     quote do
       Module.register_attribute __MODULE__, :functions, accumulate: true
