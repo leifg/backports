@@ -1,6 +1,9 @@
 defmodule Backports.Functions do
   alias Backports.Constants
 
+  # Otherwise we'll get a race condition with compilation in older versions
+  Code.ensure_compiled(Backports.PreCompiler)
+
   defmodule String do
     @before_compile {Backports.PreCompiler, :before_compile}
   end
