@@ -19,6 +19,14 @@ defmodule TrimTest do
     assert TrimWrapper.trim(["  before  ", "  after    "]) == ["before", "after"]
   end
 
+  test "TrimWrapper returns correct output piped input" do
+    assert TrimWrapper.trim_piped("  string  ") == "string"
+  end
+
+  test "TrimWrapper returns correct output for nested input" do
+    assert TrimWrapper.trim_nested("  string  ") == "string"
+  end
+
   # trim/2
 
   test "TrimWrapper returns correct trim for arity 2" do

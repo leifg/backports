@@ -21,6 +21,14 @@ defmodule TrimWrapper do
     String.trim(input, to_trim)
   end
 
+  def trim_piped(input) do
+    input |> String.trim
+  end
+
+  def trim_nested(input) do
+    String.downcase(String.upcase(String.downcase(String.trim(input))))
+  end
+
   def nothing_special do
     1 == 1
   end

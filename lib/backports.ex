@@ -43,11 +43,11 @@ defmodule Backports do
 
   defp change?(_args, true), do: true
   defp change?({:., _meta1, [{_aliases, _meta2, aliases}, function_name]}, _found) do
-    Functions.change?(aliases, function_name)
+    Functions.backport?(aliases, function_name)
   end
-  defp change?({:__block__, meta, [head | rest]}, found) do
+  defp change?({call, meta, [head | rest]}, found) do
     result = change?(head, found)
-    change?({:__block__, meta, rest}, result)
+    change?({call, meta, rest}, result)
   end
   defp change?({call, _meta, _args}, found) do
     change?(call, found)
