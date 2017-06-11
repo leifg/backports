@@ -18,4 +18,10 @@ defmodule TrimTest do
   test "TrimWrapper returns correct output for list input" do
     assert TrimWrapper.trim(["  before  ", "  after    "]) == ["before", "after"]
   end
+
+  # trim/2
+
+  test "TrimWrapper returns correct trim for arity 2" do
+    assert TrimWrapper.trim("XXstringXX", "X") == "string"
+  end
 end

@@ -17,6 +17,10 @@ defmodule TrimWrapper do
     String.trim(input)
   end
 
+  def trim(input, to_trim) do
+    String.trim(input, to_trim)
+  end
+
   def nothing_special do
     1 == 1
   end
