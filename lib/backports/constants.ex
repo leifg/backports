@@ -10,4 +10,12 @@ defmodule Backports.Constants do
       |> Enum.map(&String.to_integer/1)
       |> List.to_tuple
   end
+
+  def functions_to_backport do
+    case elixir_version() do
+      {1, 1, _} -> [{[:String], :trim}]
+      {1, 2, _} -> [{[:String], :trim}]
+      _ -> []
+    end
+  end
 end

@@ -1,5 +1,5 @@
 defmodule Backports do
-  alias Backports.Lookup
+  alias Backports.Functions
 
   defmacro __using__(_) do
     quote do
@@ -43,7 +43,7 @@ defmodule Backports do
 
   defp change?(_args, true), do: true
   defp change?({:., _meta1, [{_aliases, _meta2, aliases}, function_name]}, _found) do
-    Lookup.get(aliases, function_name) != nil
+    Functions.change?(aliases, function_name)
   end
   defp change?({:__block__, meta, [head | rest]}, found) do
     result = change?(head, found)
@@ -71,7 +71,7 @@ defmodule Backports do
   end
 
   defp backport({:., meta1, [{:__aliases__, meta2, aliases}, function_name]} = input) do
-    case Lookup.get(aliases, function_name) do
+    case Functions.get(aliases, function_name) do
       nil -> input
       {replace_aliases, replace_function} -> {:., meta1, [{:__aliases__, meta2, replace_aliases}, replace_function]}
     end

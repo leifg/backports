@@ -1,36 +1,19 @@
 defmodule Backports.Functions do
   alias Backports.Constants
 
-  defmacro before_compile(_env) do
-    dispatch(Constants.elixir_version)
+  defmodule String do
+    @before_compile {Backports.PreCompiler, :before_compile}
   end
 
-  defp dispatch({1, 2, _}) do
-    [
-      trim()
-    ]
+  def change?(aliases, function_name) do
+    Constants.functions_to_backport |> Enum.member?({aliases, function_name})
   end
 
-  defp dispatch({1, 1, _}) do
-    [
-      trim()
-    ]
-  end
-
-  defp dispatch(_) do
-    []
-  end
-
-  defp trim do
-    quote do
-      def trim(string) do
-        String.strip(string)
-      end
-
-      def trim(string, to_trim) do
-        [char | _ ] = String.to_char_list(to_trim)
-        String.strip(string, char)
-      end
+  def get(aliases, function_name) do
+    if change?(aliases, function_name) do
+      {[:Backports, :Functions | aliases], function_name}
+    else
+      nil
     end
   end
 end
