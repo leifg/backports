@@ -27,6 +27,10 @@ defmodule TrimTest do
     assert TrimWrapper.trim_nested("  string  ") == "string"
   end
 
+  test "TrimWrapper returns correct output for conditional input" do
+    assert TrimWrapper.trim_with_condition("  string  ", 1) == "string"
+  end
+
   # trim/2
 
   test "TrimWrapper returns correct trim for arity 2" do

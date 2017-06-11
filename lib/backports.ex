@@ -49,6 +49,9 @@ defmodule Backports do
     result = change?(head, found)
     change?({call, meta, rest}, result)
   end
+  defp change?([do: {call, meta, args}], found) do
+    change?({call, meta, args}, found)
+  end
   defp change?({call, _meta, _args}, found) do
     change?(call, found)
   end
@@ -76,8 +79,16 @@ defmodule Backports do
       {replace_aliases, replace_function} -> {:., meta1, [{:__aliases__, meta2, replace_aliases}, replace_function]}
     end
   end
-  defp backport({call, meta, args}) when is_list(args) do
+  defp backport({_call, _meta, nil} = input) do
+    input
+  end
+  defp backport(do: {call, meta, args}) do
+    [do: {backport(call), meta, Enum.map(args, fn(input) -> backport(input) end)}]
+  end
+  defp backport({call, meta, args}) do
     {backport(call), meta, Enum.map(args, fn(input) -> backport(input) end)}
   end
-  defp backport(input), do: input
+  defp backport(input) do
+    input
+  end
 end

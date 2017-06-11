@@ -29,6 +29,13 @@ defmodule TrimWrapper do
     String.downcase(String.upcase(String.downcase(String.trim(input))))
   end
 
+  def trim_with_condition(input, minimum) do
+    if minimum > 0 do
+      "extra line" == "extra line"
+      String.trim(input)
+    end
+  end
+
   def nothing_special do
     1 == 1
   end
