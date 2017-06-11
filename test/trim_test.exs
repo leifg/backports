@@ -27,8 +27,20 @@ defmodule TrimTest do
     assert TrimWrapper.trim_nested("  string  ") == "string"
   end
 
-  test "TrimWrapper returns correct output for conditional input" do
+  test "TrimWrapper returns correct output for short conditional" do
+    assert TrimWrapper.trim_with_short_condition("  string   ", 1) == "string"
+  end
+
+  test "TrimWrapper returns correct output for conditional input (true)" do
     assert TrimWrapper.trim_with_condition("  string  ", 1) == "string"
+  end
+
+  test "TrimWrapper returns correct output for conditional input if" do
+    assert TrimWrapper.trim_with_condition_and_else("  string  ", 1) == "string"
+  end
+
+  test "TrimWrapper returns correct output for conditional input else" do
+    assert TrimWrapper.trim_with_condition_and_else("  string  ", -1) == "string"
   end
 
   test "TrimWrapper returns correct output for dealyed call" do

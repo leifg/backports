@@ -52,6 +52,10 @@ defmodule Backports do
   defp change?([do: {call, meta, args}], found) do
     change?({call, meta, args}, found)
   end
+  defp change?([do: {call, meta, args}, else: {else_call, else_meta, else_args}], found) do
+    result = change?({call, meta, args}, found)
+    change?({else_call, else_meta, else_args}, result)
+  end
   defp change?({call, _meta, _args}, found) do
     change?(call, found)
   end
@@ -79,16 +83,28 @@ defmodule Backports do
       {replace_aliases, replace_function} -> {:., meta1, [{:__aliases__, meta2, replace_aliases}, replace_function]}
     end
   end
-  defp backport({_call, _meta, nil} = input) do
-    input
+  defp backport(do: do_statements) do
+    [do: replace_node(do_statements)]
   end
-  defp backport(do: {call, meta, args}) do
-    [do: {backport(call), meta, Enum.map(args, fn(input) -> backport(input) end)}]
-  end
-  defp backport({call, meta, args}) do
-    {backport(call), meta, Enum.map(args, fn(input) -> backport(input) end)}
+  defp backport(do: do_statements, else: else_statements) do
+    [
+      do: replace_node(do_statements),
+      else: replace_node(else_statements),
+    ]
   end
   defp backport(input) do
+    replace_node(input)
+  end
+
+  defp replace_node({call, meta, args}) when is_list(args) do
+    {backport(call), meta, Enum.map(args, &backport/1)}
+  end
+
+  defp replace_node({call, meta, arg}) do
+    {backport(call), meta, backport(arg)}
+  end
+
+  defp replace_node(input) do
     input
   end
 end

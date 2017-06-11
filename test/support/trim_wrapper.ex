@@ -29,11 +29,24 @@ defmodule TrimWrapper do
     String.downcase(String.upcase(String.downcase(String.trim(input))))
   end
 
+  def trim_with_short_condition(input, minimum) do
+    else_return = ""
+    if minimum > 0, do: String.trim(input), else: else_return
+  end
+
   def trim_with_condition(input, minimum) do
     if minimum > 0 do
       # extra line for edge cases
       input_2 = String.trim(input)
       String.trim(input_2)
+    end
+  end
+
+  def trim_with_condition_and_else(input, minimum) do
+    if minimum > 0 do
+      String.trim(input)
+    else
+      String.trim(input)
     end
   end
 
