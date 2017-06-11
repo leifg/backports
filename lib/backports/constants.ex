@@ -13,8 +13,8 @@ defmodule Backports.Constants do
 
   def functions_to_backport do
     case elixir_version() do
-      {1, 1, _} -> [{[:String], :trim}]
-      {1, 2, _} -> [{[:String], :trim}]
+      {1, 1, _} -> [{[:String], :trim}, {[:String], :to_charlist}]
+      {1, 2, _} -> [{[:String], :trim}, {[:String], :to_charlist}]
       _ -> []
     end
   end

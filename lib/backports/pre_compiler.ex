@@ -7,13 +7,15 @@ defmodule Backports.PreCompiler do
 
   defp dispatch(Backports.Functions.String, {1, 2, _}) do
     [
-      trim()
+      trim(),
+      to_charlist(),
     ]
   end
 
   defp dispatch(Backports.Functions.String, {1, 1, _}) do
     [
-      trim()
+      trim(),
+      to_charlist(),
     ]
   end
 
@@ -30,6 +32,14 @@ defmodule Backports.PreCompiler do
       def trim(string, to_trim) do
         [char | _ ] = String.to_char_list(to_trim)
         String.strip(string, char)
+      end
+    end
+  end
+
+  defp to_charlist do
+    quote do
+      def to_charlist(string) do
+        String.to_char_list(string)
       end
     end
   end
