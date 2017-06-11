@@ -31,9 +31,15 @@ defmodule TrimWrapper do
 
   def trim_with_condition(input, minimum) do
     if minimum > 0 do
-      "extra line" == "extra line"
-      String.trim(input)
+      # extra line for edge cases
+      input_2 = String.trim(input)
+      String.trim(input_2)
     end
+  end
+
+  def delayed_trim(input) do
+    fun = fn(inner) -> String.trim(inner) end
+    fun.(input)
   end
 
   def nothing_special do

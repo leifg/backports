@@ -31,6 +31,10 @@ defmodule TrimTest do
     assert TrimWrapper.trim_with_condition("  string  ", 1) == "string"
   end
 
+  test "TrimWrapper returns correct output for dealyed call" do
+    assert TrimWrapper.delayed_trim("  string  ") == "string"
+  end
+
   # trim/2
 
   test "TrimWrapper returns correct trim for arity 2" do
