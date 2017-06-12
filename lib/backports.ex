@@ -73,6 +73,12 @@ defmodule Backports do
       else: replace_node(else_statements),
     ]
   end
+  defp backport({elem1, elem2}) do
+    {
+      backport(elem1),
+      backport(elem2),
+    }
+  end
   defp backport(input) do
     replace_node(input)
   end
