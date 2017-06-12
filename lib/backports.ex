@@ -42,8 +42,7 @@ defmodule Backports do
   end
 
   defp change?(body) do
-    backported = backport(body)
-    backported != body
+    backport(body) != body
   end
 
   defp render_fun({kind, fun, args, [], body}) do
