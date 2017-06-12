@@ -22,9 +22,10 @@ defmodule Backports do
   end
 
   def on_definition(env, kind, fun, args, guards, body) do
-    parameters = {kind, fun, args, guards, body}
+    backported = backport(body)
+    parameters = {kind, fun, args, guards, backported}
     Module.put_attribute(env.module, :functions, parameters)
-    if change?(body) do
+    if backported != body do
       Module.put_attribute(env.module, :backport, {fun, length(args)})
     end
   end
@@ -41,14 +42,10 @@ defmodule Backports do
     [quote do: defoverridable unquote(function_defintions)]
   end
 
-  defp change?(body) do
-    backport(body) != body
-  end
-
   defp render_fun({kind, fun, args, [], body}) do
     quote do
       Kernel.unquote(kind)(unquote(fun)(unquote_splicing(args))) do
-        unquote(backport(body))
+        unquote(body)
       end
     end
   end
@@ -56,7 +53,7 @@ defmodule Backports do
   defp render_fun({kind, fun, args, guard, body}) do
     quote do
       Kernel.unquote(kind)(unquote(fun)(unquote_splicing(args)) when unquote_splicing(guard)) do
-        unquote(backport(body))
+        unquote(body)
       end
     end
   end
