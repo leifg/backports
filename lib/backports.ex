@@ -24,7 +24,7 @@ defmodule Backports do
   def on_definition(env, kind, fun, args, guards, body) do
     parameters = {kind, fun, args, guards, body}
     Module.put_attribute(env.module, :functions, parameters)
-    if change?(body, false) do
+    if change?(body) do
       Module.put_attribute(env.module, :backport, {fun, length(args)})
     end
   end
@@ -41,25 +41,10 @@ defmodule Backports do
     [quote do: defoverridable unquote(function_defintions)]
   end
 
-  defp change?(_args, true), do: true
-  defp change?({:., _meta1, [{_aliases, _meta2, aliases}, function_name]}, _found) do
-    Functions.backport?(aliases, function_name)
+  defp change?(body) do
+    backported = backport(body)
+    backported != body
   end
-  defp change?({call, meta, [head | rest]}, found) do
-    result = change?(head, found)
-    change?({call, meta, rest}, result)
-  end
-  defp change?([do: {call, meta, args}], found) do
-    change?({call, meta, args}, found)
-  end
-  defp change?([do: {call, meta, args}, else: {else_call, else_meta, else_args}], found) do
-    result = change?({call, meta, args}, found)
-    change?({else_call, else_meta, else_args}, result)
-  end
-  defp change?({call, _meta, _args}, found) do
-    change?(call, found)
-  end
-  defp change?(_body, _found), do: false
 
   defp render_fun({kind, fun, args, [], body}) do
     quote do
