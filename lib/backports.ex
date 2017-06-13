@@ -79,6 +79,9 @@ defmodule Backports do
       backport(elem2),
     }
   end
+  defp backport(input) when is_list(input) do
+    Enum.map(input, &backport/1)
+  end
   defp backport(input) do
     replace_node(input)
   end
