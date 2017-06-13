@@ -2,7 +2,12 @@
 
 Tooling to make it possible to run "new" code in old Elixir versions.
 
-Currently can replace `trim` and `to_charlist` functions which were not available prior to Elixir 1.3.
+Currently the following functions not available before 1.3 can be backported:
+  - `String.trim`
+  - `String.to_charlist`
+  - `String.pad_leading`
+  - `String.pad_trailing`
+can replace `trim` and `to_charlist` functions which were not available prior to Elixir 1.3.
 
 ## Installation
 
