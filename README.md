@@ -26,7 +26,7 @@ end
 Whatever module uses a function that is not available, just include `Backports`
 
 This code will work in Elixir 1.1 and 1.2
-```
+```elixir
 defmodule Foo do
   use Backports
 
